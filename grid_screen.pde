@@ -21,12 +21,14 @@ void setup()
 
 void draw()
 {
+  /*
   background(bg);
   for (int i = 0; i < squares.size() - 1; i++)
   {
     Grid square = squares.get(i);
     square.display();
   }
+  */
   for (int j = 0; j < squares.size() - 1; j++)
   {
     Grid square = squares.get(j);
