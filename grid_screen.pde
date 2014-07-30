@@ -33,14 +33,6 @@ void draw()
   p.display();
 }
 
-void mousePressed() {
-  p.clicked(mouseX,mouseY);
-}
-
-void mouseReleased() {
-  p.stopDragging();
-}
-
 class Grid {
   
   int x, y, w, h;
