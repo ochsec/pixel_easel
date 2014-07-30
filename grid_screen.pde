@@ -29,8 +29,6 @@ void draw()
     Grid square = squares.get(j);
     square.update();
   } 
-  p.rollover(mouseX, mouseY);
-  p.display();
 }
 
 class Grid {
