@@ -5,6 +5,7 @@ color bg = color(68, 68, 68);
 color pen = color(225);
 ArrayList<Grid> squares;
 Palette p = new Palette(board_w * grid_size + 15, 15, 90, 180, true);
+Swatch swatch = new Swatch(board_w * grid_size + 15, 448, 32, 32);
 
 void setup() 
 {
@@ -22,6 +23,7 @@ void setup()
     }
   }
   p.display();
+  swatch.display();
 }
 
 void draw()
@@ -32,6 +34,7 @@ void draw()
     square.update(pen);
   } 
   p.display();
+  swatch.display();
 }
 
 
@@ -40,8 +43,10 @@ void mouseClicked() {
   if(p.over == true)
   {
     pen = get(mouseX, mouseY);
+    swatch.c = pen;
   }
 }
+
 
 
 class Grid {
@@ -99,7 +104,7 @@ class Grid {
 }
 
 class Palette {
-  int x, y, w, h, offX, offY;
+  int x, y, w, h, alpha, beta, offX, offY;
   boolean visible, dragging, over;
  
   Palette(int _x, int _y, int _w, int _h, boolean _v)
@@ -108,6 +113,8 @@ class Palette {
     y = _y;
     w = _w;
     h = _h;
+    alpha = 255;
+    beta = 0;
     visible = _v;
     offX = 0;
     offY = 0;
@@ -117,6 +124,7 @@ class Palette {
   
   // Method to display
   void display() {
+    int h = 2;
     stroke(0);
     //if (dragging) fill (50);
     //else if (rollover) fill(100);
@@ -124,10 +132,39 @@ class Palette {
     //else fill(200);
     fill(255, 0, 0);
     rect(x, y, grid_size * 2, grid_size * 2);
-    fill(0, 255, 0);
+    for (int red = 224; red > -1; red -= 32)
+    {
+      fill(red, 0, 0);
+      rect(x, y + h * grid_size, grid_size * 2, grid_size * 2);
+      h += 2;
+    }
+    h = 2;
+    fill(0, 224, 0);
     rect(x + grid_size * 2, y, grid_size * 2, grid_size * 2);
+    for (int green = 224; green > -1; green -= 32)
+    {
+      fill(0, green, 0);
+      rect(x + grid_size * 2, y + h * grid_size, grid_size * 2, grid_size * 2);
+      h += 2;
+    }
+    h = 2;
     fill(0, 0, 255);
     rect(x + grid_size * 4, y, grid_size * 2, grid_size * 2);
+    for (int blue = 224; blue > -1; blue -= 32)
+    {
+      fill(0, 0, blue);
+      rect(x + grid_size * 4, y + h * grid_size, grid_size * 2, grid_size * 2);
+      h += 2;
+    }
+    h = 2;
+    fill(255);
+    rect(x + grid_size * 6, y, grid_size * 2, grid_size * 2);
+    for (int grey = 224; grey > -1; grey -= 32)
+    {
+      fill(grey);
+      rect(x + grid_size * 6, y + h * grid_size, grid_size * 2, grid_size * 2);
+      h += 2;
+    }
   }
 
   // Is a point inside the rectangle (for click)?
@@ -165,5 +202,26 @@ class Palette {
       x = mx + offX;
       y = my + offY;
     }
+  }
+}
+
+class Swatch {
+  int x, y, w, h;
+  color c;
+  
+  Swatch(int _x, int _y, int _w, int _h) 
+  {
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
+    c = color(225);
+  }
+  
+  void display()
+  {
+    stroke(255);
+    fill(c);  
+    rect(x, y, w, h);
   }
 }
