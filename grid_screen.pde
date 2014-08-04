@@ -11,6 +11,8 @@ void setup()
   frameRate(60);
   size(board_w * grid_size + 120, board_h * grid_size + 40);
   background(bg);
+  fill(bg);
+  rect(grid_size * 2 - 1, grid_size * 2 - 1, board_w * grid_size -  grid_size * 2 + 2, board_h * grid_size -  grid_size * 2 + 2);
   squares = new ArrayList<Grid>();  // Create an empty ArrayList
   for (int i = 2; i < board_w; i++)
   {
@@ -27,18 +29,20 @@ void draw()
   for (int j = 0; j < squares.size() - 1; j++)
   {
     Grid square = squares.get(j);
-    square.update();
+    square.update(pen);
   } 
+  p.display();
 }
 
-void keyPressed()
-{
-  println(keyCode);  
-  if (keyCode == 83)
+
+void mouseClicked() {
+  p.rollover(mouseX, mouseY);
+  if(p.over == true)
   {
-    save("output.png");
+    pen = get(mouseX, mouseY);
   }
 }
+
 
 class Grid {
   
@@ -70,8 +74,9 @@ class Grid {
     rect(x, y, w, h);
   }
 
-  void update()
+  void update(color _c)
   {
+    c = _c;
     if ( ( (mouseX >= x) && (mouseX < x + w) ) 
     && ( (mouseY >= y) && (mouseY < y + h) ) )
     {
@@ -95,7 +100,7 @@ class Grid {
 
 class Palette {
   int x, y, w, h, offX, offY;
-  boolean visible, dragging, rollover;
+  boolean visible, dragging, over;
  
   Palette(int _x, int _y, int _w, int _h, boolean _v)
   {
@@ -107,16 +112,22 @@ class Palette {
     offX = 0;
     offY = 0;
     dragging = false;
-    rollover = false;
+    over = false;
   }
   
   // Method to display
   void display() {
     stroke(0);
-    if (dragging) fill (50);
-    else if (rollover) fill(100);
-    else fill(175,200);
-    rect(x,y,w,h);
+    //if (dragging) fill (50);
+    //else if (rollover) fill(100);
+    //if (rollover) fill(100);
+    //else fill(200);
+    fill(255, 0, 0);
+    rect(x, y, grid_size * 2, grid_size * 2);
+    fill(0, 255, 0);
+    rect(x + grid_size * 2, y, grid_size * 2, grid_size * 2);
+    fill(0, 0, 255);
+    rect(x + grid_size * 4, y, grid_size * 2, grid_size * 2);
   }
 
   // Is a point inside the rectangle (for click)?
@@ -129,12 +140,17 @@ class Palette {
     }
   }
   
+  void getColor()
+  {
+    pen = get(mouseX, mouseY);  
+  }
+  
   // Is a point inside the rectangle (for rollover)
   void rollover(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < y + h) {
-      rollover = true;
+      over = true;
     } else {
-      rollover = false;
+      over = false;
     }
   }
 
