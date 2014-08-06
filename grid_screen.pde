@@ -22,6 +22,7 @@ void setup()
       squares.add(new Grid(i, j, 1, 1, pen));
     }
   }
+  squares.add(new Grid(80, 60, 1, 1, pen));
   p.display();
   swatch.display();
 }
