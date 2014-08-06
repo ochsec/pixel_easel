@@ -1,7 +1,7 @@
 int grid_size = 8;
 int board_w = 80;
 int board_h = 60;
-color bg = color(68, 68, 68);
+color bg = color(255, 255, 255);
 color pen = color(225);
 ArrayList<Grid> squares;
 Palette p = new Palette(board_w * grid_size + 15, 15, 90, 180, true);
