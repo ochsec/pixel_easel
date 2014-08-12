@@ -48,7 +48,14 @@ void mouseClicked() {
   }
 }
 
-
+void keyPressed()
+{
+  println(keyCode);  
+  if (keyCode == 83)
+  {
+    save("output.png");
+  }
+}
 
 class Grid {
   
