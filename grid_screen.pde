@@ -6,6 +6,7 @@ color pen = color(225);
 ArrayList<Grid> squares;
 Palette p = new Palette(board_w * grid_size + 15, 15, 90, 180, true);
 Swatch swatch = new Swatch(board_w * grid_size + 15, 448, 32, 32);
+PImage pencil;
 
 void setup() 
 {
@@ -13,6 +14,7 @@ void setup()
   size(board_w * grid_size + 120, board_h * grid_size + 40);
   background(bg);
   fill(bg);
+  pencil = loadImage("pencil.png");
   rect(grid_size * 2 - 1, grid_size * 2 - 1, board_w * grid_size -  grid_size * 2 + 2, board_h * grid_size -  grid_size * 2 + 2);
   squares = new ArrayList<Grid>();  // Create an empty ArrayList
   for (int i = 2; i < board_w; i++)
@@ -271,6 +273,10 @@ class Swatch {
   int x, y, w, h;
   color c;
   
+class Swatch {
+  int x, y, w, h;
+  color c, p;
+  
   Swatch(int _x, int _y, int _w, int _h) 
   {
     x = _x;
@@ -278,10 +284,12 @@ class Swatch {
     w = _w;
     h = _h;
     c = color(225);
+    p = color(255, 0, 0);
   }
   
   void display()
   {
+    image(pencil, x, y - 48, 32,  32);
     stroke(255);
     fill(c);  
     rect(x, y, w, h);
