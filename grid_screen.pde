@@ -1,4 +1,4 @@
-/* @pjs preload="pencil.png"; */
+/* @pjs preload="pencil.png, eraser.png"; */
 
 int grid_size = 8;
 int board_w = 80;
@@ -8,7 +8,8 @@ color pen = color(225);
 ArrayList<Grid> squares;
 Palette p = new Palette(board_w * grid_size + 15, 15, 90, 180, true);
 Swatch swatch = new Swatch(board_w * grid_size + 15, 448, 32, 32);
-PImage pencil;
+Eraser e = new Eraser(board_w * grid_size + 64, 400, 32, 32);
+PImage pencil, eraser;
 
 void setup() 
 {
@@ -17,6 +18,7 @@ void setup()
   background(bg);
   fill(bg);
   pencil = loadImage("pencil.png");
+  eraser = loadImage("eraser.png");
   rect(grid_size * 2 - 1, grid_size * 2 - 1, board_w * grid_size -  grid_size * 2 + 2, board_h * grid_size -  grid_size * 2 + 2);
   squares = new ArrayList<Grid>();  // Create an empty ArrayList
   for (int i = 2; i < board_w; i++)
@@ -40,6 +42,7 @@ void draw()
   } 
   p.display();
   swatch.display();
+  e.display();
 }
 
 
@@ -49,6 +52,11 @@ void mouseClicked() {
   {
     pen = get(mouseX, mouseY);
     swatch.c = pen;
+  }
+  e.rollover(mouseX, mouseY);
+  if(e.over == true)
+  {
+    pen = bg;  
   }
 }
 
@@ -60,6 +68,34 @@ void keyPressed()
     save("output.png");
   }
 }
+class Eraser {
+  int x, y, w, h;
+  boolean over;
+  
+  Eraser(int _x, int _y, int _w, int _h)
+  {
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
+    over = false;
+  }
+  
+  void display()
+  {
+    image(eraser, x, y, w, h);
+  }
+  
+  void rollover(int mx, int my)
+  {
+    if (mx > x && mx < x + w && my > y && my < y + h) {
+      over = true;
+    } else {
+      over = false;
+    }
+  }
+}
+
 class Grid {
   
   int x, y, w, h;
@@ -284,7 +320,7 @@ class Swatch {
   
   void display()
   {
-    image(pencil, x, y - 48, 32,  32);
+    image(pencil, x, y - 48, w, h);
     stroke(255);
     fill(c);  
     rect(x, y, w, h);
