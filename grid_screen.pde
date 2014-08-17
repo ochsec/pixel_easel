@@ -1,3 +1,5 @@
+/* @pjs preload="pencil.png"; */
+
 int grid_size = 8;
 int board_w = 80;
 int board_h = 60;
@@ -58,7 +60,6 @@ void keyPressed()
     save("output.png");
   }
 }
-
 class Grid {
   
   int x, y, w, h;
@@ -112,7 +113,6 @@ class Grid {
     }
   }
 }
-
 class Palette {
   int x, y, w, h, alpha, beta, offX, offY;
   boolean visible, dragging, over;
@@ -268,11 +268,6 @@ class Palette {
     }
   }
 }
-
-class Swatch {
-  int x, y, w, h;
-  color c;
-  
 class Swatch {
   int x, y, w, h;
   color c, p;
@@ -295,3 +290,4 @@ class Swatch {
     rect(x, y, w, h);
   }
 }
+
