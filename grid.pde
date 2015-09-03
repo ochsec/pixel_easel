@@ -41,4 +41,11 @@ class Grid {
       }    
     }
   }
+  
+  void shake(color _c) {
+    c = _c;
+    stroke(c);
+    fill(c);
+    rect(x, y, w, h);
+  }
 }
