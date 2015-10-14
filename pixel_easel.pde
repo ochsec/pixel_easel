@@ -59,21 +59,16 @@ void onDoubleTap(float x, float y) {
   }
 }
 
+void onLongPress(float x, float y) {
+  pen = color(random(255), random(255), random(255));
+}
+
 void onAccelerometerEvent(float x, float y, float z)
 {
   accelerometer.x = x;
   accelerometer.y = y;
   accelerometer.z = z;
 }
-
-/*
-void shake() {
-  for (int i = 0; i < squares.size() - 1; i++) {
-    Grid square = squares.get(i);
-    square.update(bg);
-  }  
-}
-*/
 
 public boolean surfaceTouchEvent(MotionEvent event) {
   // call to keep mouseX and mouseY constants updated

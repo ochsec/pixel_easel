@@ -14,11 +14,11 @@ class Grid {
   
   void display() {
     if (active == true) {
-        noStroke();
-        fill(80);
+        stroke(pen);
+        fill(pen);
     }
     else {
-      stroke(80);
+      stroke(pen);
       fill(bg);
     }
     rect(x, y, w, h);
@@ -29,13 +29,13 @@ class Grid {
     if ( ( (mouseX >= x) && (mouseX < x + w) ) && ( (mouseY >= y) && (mouseY < y + h) ) ) {
       if (mousePressed && (solid == true)) {
         active = true;
-        stroke(80);
-        fill(80);
+        stroke(pen);
+        fill(pen);
         rect(x, y, w, h);
       }
       else if (mousePressed && (solid == false)) {
         active = false;
-        stroke(80);
+        stroke(pen);
         fill(bg);
         rect(x, y, w, h);
       }    
