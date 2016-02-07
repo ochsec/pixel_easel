@@ -5,6 +5,7 @@ var bgColor;
 var penColor;
 var Grid = [];
 var Swatches = [];
+var clearBtn;
 var colors;
 
 function setup() {
@@ -41,12 +42,10 @@ function setup() {
   }
   var spacing = 0;
   for (var c in colors) {
-    Swatches.push(new swatch(spacing, 300, 120, 50, colors[c].bg, colors[c].pen));  
-    spacing += 120;
+    Swatches.push(new swatch(spacing, 300, 100, 50, colors[c].bg, colors[c].pen));  
+    spacing += 100;
   }
-  
-  //Swatches.push(new swatch(0, 300, 120, 50, colors.setOne.bg, colors.setOne.pen));
-  //Swatches.push(new swatch(120, 300, 120, 50, colors.setTwo.bg, colors.setTwo.pen));
+  cBtn = new clearBtn(500, 300, 100, 50);
   console.log(Grid.length);
 }
 
@@ -59,6 +58,8 @@ function draw() {
     Swatches[j].update();
     Swatches[j].display();
   } 
+  cBtn.update();
+  cBtn.display();
 }
 
 function cell (_x, _y, _w, _h, _c) {
@@ -87,12 +88,6 @@ function cell (_x, _y, _w, _h, _c) {
           this.c = penColor;
           this.changed = true;
         }
-        else if (mouseIsPressed && mouseButton == RIGHT) {
-          this.c = bgColor;
-          this.changed= true;
-       
-        }
-
       }
   };
 }
@@ -110,7 +105,7 @@ function swatch (_x, _y, _w, _h, _bg, _pen) {
     fill(this.bg);
     rect(this.x, this.y, this.w, this.h);
     fill(this.pen);
-    rect(this.x + 10, this.y + 10, this.w - 20, this.h - 20);
+    rect(this.x + 40, this.y + 10, this.w - 80, this.h - 20);
   };
   
   this.update = function () {
@@ -118,17 +113,48 @@ function swatch (_x, _y, _w, _h, _bg, _pen) {
       if (mouseIsPressed && mouseButton == LEFT) {
         bgColor = this.bg;
         penColor = this.pen;
-        console.log(penColor);
-        for (var i = 0; i < Grid.length; i++) {
-          if (Grid[i].changed === false) {
-            Grid[i].c = bgColor;
-          }
-        }
       }
       else if (mouseIsPressed && mouseButton == RIGHT) {
         bgColor = this.pen;
         penColor = this.bg;
+      }
+      for (var i = 0; i < Grid.length; i++) {
+        if (Grid[i].changed === false) {
+          Grid[i].c = bgColor;
+        }        
       }        
     }
   };
+}
+
+function clearBtn (_x, _y, _w, _h) {
+  this.x= _x;
+  this.y = _y;
+  this.w = _w;
+  this.h = _h;
+  
+  this.display = function () {
+    stroke(50);
+    fill(255);
+    rect(this.x, this.y, this.w, this.h);
+    textSize(36);
+    strokeWeight(2);
+    text("clear", this.x + 10, this.y + this.h / 2 + 10);
+    strokeWeight(1);
+  };
+  
+  this.update = function () {
+    if ( ( (mouseX > this.x) && (mouseX < this.x + this.w) ) && ( (mouseY > this.y) && (mouseY < this.y + this.h) ) ) {
+      if (mouseIsPressed && mouseButton == LEFT) {
+        for (var i = 0; i < Grid.length; i++) {
+          Grid[i].c = bgColor;
+        }
+        console.log("clicked");
+      }
+    }
+  };
+}
+
+function mousePressed() {
+  return false;
 }
