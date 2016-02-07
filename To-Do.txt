@@ -1,5 +1,0 @@
-To Do:
-1. Fix box-borders problem (box borders don't always appear on all 4 sides of cell)
-2. Increase default drawing area width, height
-3. Make color pallet bigger, expand color pallet and create custom color, alpha-value tool
-4. Expand number of grid shapes
