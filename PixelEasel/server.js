@@ -50,6 +50,11 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit('background', data);
    });
    
+   socket.on('clear', function (data) {
+    console.log("Received r: " + data.r + ", g: " + data.g + ", b: " + data.b + ", alpha: " + data.a);  
+    socket.broadcast.emit('clear', data);
+   });
+   
    socket.on('disconnect', function () {
        console.log("Client has disconnected");
    });

@@ -63,6 +63,13 @@ function setup() {
       Grid[i].updateBackground(data.r, data.g, data.b, data.a);
     }
   });
+  socket.on('clear', function (data) {
+    bgColor = color(data.r, data.g, data.b, data.a);
+    for (var i = 0; i < Grid.length; i++) {
+      Grid[i].c = bgColor;
+      Grid[i].changed = false;
+    }
+  });
 }
 
 function draw() {
@@ -128,9 +135,9 @@ function cell (_x, _y, _w, _h, _c) {
   
   this.updateBackground = function (_r, _g, _b, _a) {
     if (!this.changed) {
-      this.c = color(_r, _g, _b, _a);
+      bgColor = color(_r, _g, _b, _a);
       stroke(0);
-      fill(this.c);
+      fill(bgColor);
       rect(this.x, this.y, this.w, this.h);      
     }
   };  
@@ -206,7 +213,15 @@ function clearBtn (_x, _y, _w, _h) {
       if (mouseIsPressed && mouseButton == LEFT) {
         for (var i = 0; i < Grid.length; i++) {
           Grid[i].c = bgColor;
+          Grid[i].changed = false;
         }
+        var data = {
+          r: red(bgColor),
+          g: green(bgColor),
+          b: blue(bgColor),
+          a: alpha(bgColor)
+        };
+        socket.emit('clear', data);
       }
     }
   };
