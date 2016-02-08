@@ -1,3 +1,5 @@
+var socket;
+
 var gridSize = 10;
 var boardWidth = 60;
 var boardHeight = 30;
@@ -5,7 +7,7 @@ var bgColor;
 var penColor;
 var Grid = [];
 var Swatches = [];
-var clearBtn;
+var cBtn;
 var colors;
 
 function setup() {
@@ -46,7 +48,18 @@ function setup() {
     spacing += 100;
   }
   cBtn = new clearBtn(500, 300, 100, 50);
-  console.log(Grid.length);
+  for (var i = 0; i < Grid.length; i++) {
+    Grid[i].update();
+    Grid[i].display();
+  }  
+  socket = io.connect('http://localhost:8080');
+  socket.on('mouse', function (data) {
+    //console.log("Received x: " + data.x + ", y: " + data.y + ", red: " + data.r +
+    //    ", green: " + data.g + ", blue: " + data.b + ", alpha: " + data.a);
+    for (var i = 0; i < Grid.length; i++) {
+      Grid[i].updateFromServer(data.x, data.y, data.r, data.g, data.b, data.a);
+    }
+  });
 }
 
 function draw() {
@@ -87,9 +100,30 @@ function cell (_x, _y, _w, _h, _c) {
         if (mouseIsPressed && mouseButton == LEFT) {
           this.c = penColor;
           this.changed = true;
+          var data = {
+            x: mouseX,
+            y: mouseY,
+            r: red(penColor),
+            g: green(penColor),            
+            b: blue(penColor),            
+            a: alpha(penColor)
+          };
+          console.log(data);
+          socket.emit('mouse', data);
         }
       }
   };
+  
+  this.updateFromServer = function (_x, _y, _r, _g, _b, _a) {
+    if ( ( (_x > this.x) && (_x < this.x + this.w) ) && ( (_y > this.y) && (_y < this.y + this.h) ) ) {
+      this.c = color(_r, _g, _b, _a); 
+      console.log(this.c);
+      this.changed = true;      
+      stroke(0);
+      fill(this.c);
+      rect(this.x, this.y, this.w, this.h);
+    }
+  }
 }
 
 function swatch (_x, _y, _w, _h, _bg, _pen) {
@@ -149,12 +183,13 @@ function clearBtn (_x, _y, _w, _h) {
         for (var i = 0; i < Grid.length; i++) {
           Grid[i].c = bgColor;
         }
-        console.log("clicked");
       }
     }
   };
 }
 
-function mousePressed() {
-  return false;
+function mouseDragged() {
+  for (var i = 0; i < Grid.length; i++) {
+    Grid[i].update();
+  }  
 }
