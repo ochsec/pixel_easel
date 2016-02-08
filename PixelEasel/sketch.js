@@ -54,10 +54,13 @@ function setup() {
   }  
   socket = io.connect('http://localhost:8080');
   socket.on('mouse', function (data) {
-    //console.log("Received x: " + data.x + ", y: " + data.y + ", red: " + data.r +
-    //    ", green: " + data.g + ", blue: " + data.b + ", alpha: " + data.a);
     for (var i = 0; i < Grid.length; i++) {
       Grid[i].updateFromServer(data.x, data.y, data.r, data.g, data.b, data.a);
+    }
+  });
+  socket.on('background', function (data) {
+    for (var i = 0; i < Grid.length; i++) {
+      Grid[i].updateBackground(data.r, data.g, data.b, data.a);
     }
   });
 }
@@ -108,7 +111,6 @@ function cell (_x, _y, _w, _h, _c) {
             b: blue(penColor),            
             a: alpha(penColor)
           };
-          console.log(data);
           socket.emit('mouse', data);
         }
       }
@@ -117,13 +119,21 @@ function cell (_x, _y, _w, _h, _c) {
   this.updateFromServer = function (_x, _y, _r, _g, _b, _a) {
     if ( ( (_x > this.x) && (_x < this.x + this.w) ) && ( (_y > this.y) && (_y < this.y + this.h) ) ) {
       this.c = color(_r, _g, _b, _a); 
-      console.log(this.c);
       this.changed = true;      
       stroke(0);
       fill(this.c);
       rect(this.x, this.y, this.w, this.h);
     }
-  }
+  };
+  
+  this.updateBackground = function (_r, _g, _b, _a) {
+    if (!this.changed) {
+      this.c = color(_r, _g, _b, _a);
+      stroke(0);
+      fill(this.c);
+      rect(this.x, this.y, this.w, this.h);      
+    }
+  };  
 }
 
 function swatch (_x, _y, _w, _h, _bg, _pen) {
@@ -147,16 +157,30 @@ function swatch (_x, _y, _w, _h, _bg, _pen) {
       if (mouseIsPressed && mouseButton == LEFT) {
         bgColor = this.bg;
         penColor = this.pen;
+        var data = {
+          r: red(bgColor),
+          g: green(bgColor),            
+          b: blue(bgColor),            
+          a: alpha(bgColor)          
+        };
+        socket.emit('background', data);
       }
       else if (mouseIsPressed && mouseButton == RIGHT) {
         bgColor = this.pen;
         penColor = this.bg;
+        var data = {
+          r: red(bgColor),
+          g: green(bgColor),            
+          b: blue(bgColor),            
+          a: alpha(bgColor)          
+        };
+        socket.emit('background', data);        
       }
       for (var i = 0; i < Grid.length; i++) {
-        if (Grid[i].changed === false) {
+        if (!Grid[i].changed) {
           Grid[i].c = bgColor;
         }        
-      }        
+      }  
     }
   };
 }
@@ -192,4 +216,10 @@ function mouseDragged() {
   for (var i = 0; i < Grid.length; i++) {
     Grid[i].update();
   }  
+}
+
+function mouseClicked() {
+  for (var i = 0; i < Swatches.length; i++) {
+    Swatches[i].update();
+  }
 }
