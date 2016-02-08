@@ -45,7 +45,12 @@ io.sockets.on('connection', function (socket) {
      socket.broadcast.emit('mouse', data); 
    });
    
+   socket.on('background', function (data) {
+    console.log("Received r: " + data.r + ", g: " + data.g + ", b: " + data.b + ", alpha: " + data.a);  
+    socket.broadcast.emit('background', data);
+   });
+   
    socket.on('disconnect', function () {
        console.log("Client has disconnected");
-   })
+   });
 });
