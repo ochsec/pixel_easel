@@ -59,8 +59,12 @@ function setup() {
     }
   });
   socket.on('background', function (data) {
+    bgColor = color(data.r, data.g, data.b, data.a);
     for (var i = 0; i < Grid.length; i++) {
-      Grid[i].updateBackground(data.r, data.g, data.b, data.a);
+      //Grid[i].updateBackground(data.r, data.g, data.b, data.a);
+      if (!Grid[i].changed) {
+        Grid[i].c = bgColor;              
+      }       
     }
   });
   socket.on('clear', function (data) {
@@ -132,15 +136,6 @@ function cell (_x, _y, _w, _h, _c) {
       rect(this.x, this.y, this.w, this.h);
     }
   };
-  
-  this.updateBackground = function (_r, _g, _b, _a) {
-    if (!this.changed) {
-      bgColor = color(_r, _g, _b, _a);
-      stroke(0);
-      fill(bgColor);
-      rect(this.x, this.y, this.w, this.h);      
-    }
-  };  
 }
 
 function swatch (_x, _y, _w, _h, _bg, _pen) {
