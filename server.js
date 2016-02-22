@@ -3,13 +3,13 @@ var app = express();
 var server = require('http').Server(app);
 var PORT = process.env.PORT || 3000;
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/public'));
 server.listen(PORT);
 
 console.log('Server started on port ' + PORT);
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 var io = require('socket.io').listen(server);
